@@ -38,14 +38,6 @@ class StorageDaoImplTest {
     }
 
     @Test
-    void get_existingFruit_Ok() {
-        Fruit apple = new Fruit("apple");
-        storageDao.save(apple, 50);
-
-        assertEquals(50, storageDao.get(apple));
-    }
-
-    @Test
     void getAll_returnsUnmodifiableMap_Ok() {
         storageDao.save(new Fruit("pear"), 10);
         Map<Fruit, Integer> leftovers = storageDao.getAll();

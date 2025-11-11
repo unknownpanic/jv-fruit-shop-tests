@@ -20,7 +20,7 @@ class DataConverterImplTest {
 
     @Test
     void convertToTransaction_validInput_Ok() {
-        List<String> lines = List.of("operation,fruit,quantity", "b,banana,100", "s,apple,50");
+        List<String> lines = List.of("type,fruit,quantity", "b,banana,100", "s,apple,50");
         List<FruitTransaction> result = dataConverter.convertToTransaction(lines);
 
         assertAll(
@@ -31,23 +31,27 @@ class DataConverterImplTest {
                 () -> assertEquals("banana",
                         result.get(0).getFruit().getFruitName()),
                 () -> assertEquals(100,
-                        result.get(0).getQuantity())
+                        result.get(0).getQuantity()),
+                () -> assertEquals("apple",
+                        result.get(1).getFruit().getFruitName()),
+                () -> assertEquals(50,
+                        result.get(1).getQuantity())
         );
     }
 
     @Test
-    @DisplayName("Лише два значення")
+    @DisplayName("")
     void convertToTransaction_invalidLine_NotOk() {
-        List<String> invalid = List.of("operation,fruit,quantity", "b,banana");
+        List<String> invalid = List.of("type,fruit,quantity", "b,banana");
 
         assertThrows(IllegalArgumentException.class,
                 () -> dataConverter.convertToTransaction(invalid));
     }
 
     @Test
-    @DisplayName("Неіснуюча операція.")
+    @DisplayName("Non-existent operation type.")
     void convertToTransaction_invalidOperation_NotOk() {
-        List<String> invalid = List.of("operation,fruit,quantity", "x,banana,100");
+        List<String> invalid = List.of("type,fruit,quantity", "x,banana,100");
 
         assertThrows(IllegalArgumentException.class,
                 () -> dataConverter.convertToTransaction(invalid));
@@ -61,7 +65,7 @@ class DataConverterImplTest {
 
     @Test
     void convertToTransaction_invalidQuantity_NotOk() {
-        List<String> invalid = List.of("operation,fruit,quantity", "b,banana,abc");
+        List<String> invalid = List.of("type,fruit,quantity", "b,banana,abc");
 
         assertThrows(IllegalArgumentException.class,
                 () -> dataConverter.convertToTransaction(invalid));
